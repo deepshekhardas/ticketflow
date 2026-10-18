@@ -1,0 +1,74 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Boilerplate definitions
+    function isSignedIn() { return request.auth != null; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+
+    function isValidEvent(data) {
+      return data.keys().hasAll(['title', 'date', 'venue', 'price', 'image', 'category', 'createdAt']) &&
+             data.keys().size() == 7 &&
+             data.title is string &&
+             data.date is string &&
+             data.venue is string &&
+             data.price is number &&
+             data.image is string &&
+             data.category is string &&
+             data.createdAt == request.time;
+    }
+
+    function isValidSeatBooking(data) {
+      return data.keys().hasAll(['userId', 'status', 'updatedAt']) &&
+             data.keys().size() == 3 &&
+             data.userId == request.auth.uid &&
+             data.status == 'booked' &&
+             data.updatedAt == request.time;
+    }
+
+    function isValidUserBooking(data) {
+      return data.keys().hasAll(['eventId', 'seats', 'totalAmount', 'status', 'createdAt']) &&
+             data.keys().size() == 5 &&
+             data.eventId is string &&
+             data.seats is list && data.seats.size() > 0 && data.seats.size() <= 20 &&
+             data.totalAmount is number && data.totalAmount >= 0 &&
+             data.status == 'confirmed' &&
+             data.createdAt == request.time;
+    }
+
+    match /events/{eventId} {
+      allow read: if true; // Publicly accessible events
+      // Allow create for seeding the MVP data.
+      allow create: if isSignedIn();
+      allow update, delete: if false;
+
+      match /seats/{seatId} {
+        allow read: if true;
+        allow create: if isSignedIn() &&
+                      isValidId(seatId) &&
+                      isValidSeatBooking(incoming());
+        allow update, delete: if false; // Immutable once booked
+      }
+    }
+
+    match /users/{userId}/bookings/{bookingId} {
+      allow list: if request.auth.uid == userId;
+      allow get: if request.auth.uid == userId;
+      allow create: if request.auth.uid == userId && isValidUserBooking(incoming());
+      allow update, delete: if false; // Immutable receipt
+    }
+    match /users/{userId}/support/{ticketId} {
+      allow list: if request.auth.uid == userId;
+      allow get: if request.auth.uid == userId;
+      allow create: if request.auth.uid == userId && 
+                    incoming().keys().hasAll(['subject', 'message', 'status', 'createdAt']) &&
+                    incoming().keys().size() == 4 &&
+                    incoming().subject is string && incoming().subject.size() <= 100 &&
+                    incoming().message is string && incoming().message.size() <= 1000 &&
+                    incoming().status == 'open' &&
+                    incoming().createdAt == request.time;
+      allow update, delete: if false; 
+    }
+  }
+}

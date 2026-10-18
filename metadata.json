@@ -1,0 +1,6 @@
+{
+  "name": "TicketFlow — IndigoPass Demo",
+  "description": "Independent event discovery and seat-booking demo by Deepshekhar Das, featuring interactive selection and a simulated checkout. No real payments or admission tickets.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

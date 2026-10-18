@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+}
+
+body {
+  background-color: #030303;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  color: #ffffff;
+  font-family: var(--font-sans);
+}
+
+.lavish-gradient-text {
+  background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lavish-gold-text {
+  background: linear-gradient(to right, #cfaf72, #fbf5b7, #b28838, #fcf6ba, #cfaf72);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 4s linear infinite;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.015);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.lavish-glow {
+  box-shadow: 0 0 50px rgba(139, 92, 246, 0.2);
+}
+
+.shimmer-button {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.shimmer-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3), 0 0 20px rgba(234, 179, 8, 0.2);
+}
+
+.shimmer-button::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+  transform: rotate(30deg);
+  animation: shimmer 3s infinite linear;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) rotate(30deg); }
+  100% { transform: translateX(100%) rotate(30deg); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(2deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.animate-float {
+  animation: float 8s ease-in-out infinite;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.ticket-holo {
+  position: relative;
+}
+.ticket-holo::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(125deg, transparent 20%, rgba(255,255,255,0.05) 40%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.05) 60%, transparent 80%);
+  background-size: 200% 200%;
+  animation: holoSweep 6s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 10;
+  mix-blend-mode: color-dodge;
+}
+
+@keyframes holoSweep {
+  0% { background-position: -50% -50%; }
+  50% { background-position: 150% 150%; }
+  100% { background-position: -50% -50%; }
+}
+
+@media print {
+  body { background: white; color: black; }
+  header, footer, .print\:hidden { display: none !important; }
+  .glass-panel { background: white !important; border: 2px solid #ccc !important; box-shadow: none !important; color: black !important; }
+  .lavish-gold-text { background: none; -webkit-text-fill-color: black; color: black; }
+  * { text-shadow: none !important; box-shadow: none !important; }
+  .ticket-holo::before { display: none; }
+  .bg-\[\#030303\]\/90, .bg-\[\#0a0a0a\] { background: white !important; color: black !important; }
+  .text-white { color: black !important; }
+  .text-slate-500, .text-slate-400 { color: #555 !important; }
+  .border-white\/10 { border-color: #ddd !important; }
+  main { padding-top: 0 !important; }
+}
