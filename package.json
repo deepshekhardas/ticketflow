@@ -22,7 +22,7 @@
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "react-qr-code": "^2.0.21",
-    "vite": "^6.2.3"
+    "vite": "^8.3.4"
   },
   "devDependencies": {
     "@firebase/eslint-plugin-security-rules": "^0.0.2",
@@ -30,8 +30,8 @@
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
-    "tsx": "^4.21.0",
+    "tsx": "^4.23.15",
     "typescript": "~5.8.2",
-    "vite": "^6.2.3"
+    "vite": "^8.3.4"
   }
 }
